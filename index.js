@@ -8,7 +8,11 @@
 function toggleSellModal() {
 	document.getElementById("sell-something-modal").classList.toggle("hidden");
 	document.getElementById("modal-backdrop").classList.toggle("hidden");
-	document.querySelectorAll("input").forEach(input => input.value = "");
+	document.getElementById("post-text-input").value = "";
+	document.getElementById("post-photo-input").value = "";
+	document.getElementById("post-price-input").value = "";
+	document.getElementById("post-city-input").value = "";
+	document.getElementById("post-condition-new").checked = true;
 }
 
 function createPost() {
