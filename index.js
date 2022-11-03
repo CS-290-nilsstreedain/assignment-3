@@ -12,43 +12,53 @@ function toggleSellModal() {
 }
 
 function createPost() {
+	var description = document.getElementById("post-text-input").value;
+	var photo = document.getElementById("post-photo-input").value;
+	var price = document.getElementById("post-price-input").value;
+	var city = document.getElementById("post-city-input").value;
+	var condition = document.querySelector('input[name="post-condition"]:checked').getAttribute("id").split('-')[2];
+	
+	if (!description || !photo || !price || !city || !condition) {
+		alert("Please fill out all required fields.");
+		return;
+	}
+		
 	var post = Object.assign(document.createElement("div"), {className: "post"});
-	post.dataset.price = document.getElementById("post-price-input").value;
-	post.dataset.city = document.getElementById("post-city-input").value;
-	post.dataset.condition = document.querySelector('input[name="post-condition"]:checked').getAttribute("id").split('-')[2];
+		post.dataset.price = price;
+		post.dataset.city = city;
+		post.dataset.condition = condition;
 	
 	var postContents = Object.assign(document.createElement("div"), {className: "post-conents"});
-	post.appendChild(postContents);
+		post.appendChild(postContents);
 	
 	var postImageContainer = Object.assign(document.createElement("div"), {className: "post-image-container"});
-	postContents.appendChild(postImageContainer);
+		postContents.appendChild(postImageContainer);
 	
 	postImageContainer.appendChild(Object.assign(document.createElement("img"), {
-		src: document.getElementById("post-photo-input").value,
-		alt: document.getElementById("post-text-input").value
+		src: photo,
+		alt: description
 	}));
 	
 	var postInfoContainer = Object.assign(document.createElement("div"), {className: "post-info-container"});
-	postContents.appendChild(postInfoContainer);
+		postContents.appendChild(postInfoContainer);
 	
 	postInfoContainer.appendChild(Object.assign(document.createElement("a"), {
 		className: "post-title",
 		href: "#",
-		textContent: document.getElementById("post-text-input").value
+		textContent: description
 	}));
 	
 	postInfoContainer.appendChild(Object.assign(document.createElement("span"), {
 		className: "post-price",
-		textContent: document.getElementById("post-price-input").value
+		textContent: price
 	}));
 	
 	postInfoContainer.appendChild(Object.assign(document.createElement("span"), {
 		className: "post-city",
-		textContent: `(${document.getElementById("post-city-input").value})`
+		textContent: `(${price})`
 	}));
 	
 	posts.appendChild(post);
-	
 	toggleSellModal();
 }
 
