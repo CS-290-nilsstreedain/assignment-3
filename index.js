@@ -6,19 +6,19 @@
  * Email: streedan@oregonstate.edu
  */
 function toggleSellModal() {
-	var elementsToToggle = ["sell-something-modal", "modal-backdrop"];
+	const elementsToToggle = ["sell-something-modal", "modal-backdrop"];
 	elementsToToggle.forEach(e => document.getElementById(e).classList.toggle("hidden"));
-	var inputsToClear = ["post-text-input", "post-photo-input", "post-price-input", "post-city-input"]
+	const inputsToClear = ["post-text-input", "post-photo-input", "post-price-input", "post-city-input"]
 	inputsToClear.forEach(e => document.getElementById(e).value = "");
 	document.getElementById("post-condition-new").checked = true;
 }
 
 function createPost() {
-	var description = document.getElementById("post-text-input").value;
-	var photo = document.getElementById("post-photo-input").value;
-	var price = document.getElementById("post-price-input").value;
-	var city = document.getElementById("post-city-input").value;
-	var condition = document.querySelector('input[name="post-condition"]:checked').value;
+	const description = document.getElementById("post-text-input").value;
+	const photo = document.getElementById("post-photo-input").value;
+	const price = document.getElementById("post-price-input").value;
+	const city = document.getElementById("post-city-input").value;
+	const condition = document.querySelector('input[name="post-condition"]:checked').value;
 	
 	if (!description || !photo || !price || !city || !condition) {
 		alert("Please fill out all required fields.");
@@ -63,37 +63,30 @@ function createPost() {
 
 const listOfPosts = document.querySelectorAll(".post");
 function filterPosts() {
-	var text = document.getElementById("filter-text").value;
-	var priceMin = document.getElementById("filter-min-price").value;
-	var priceMax = document.getElementById("filter-max-price").value;
-	var city = document.getElementById("filter-city").value;
-	var conditionList = Array.from(document.querySelectorAll('input[name="filter-condition"]:checked'));
+	const text = document.getElementById("filter-text").value;
+	const priceMin = parseInt(document.getElementById("filter-min-price").value);
+	const priceMax = parseInt(document.getElementById("filter-max-price").value);
+	const city = document.getElementById("filter-city").value;
+	const conditionList = Array.from(document.querySelectorAll('input[name="filter-condition"]:checked'));
 	
 	for (var i = 0; i < listOfPosts.length; i++) {
-		var textBool = listOfPosts[i].firstElementChild.lastElementChild.firstElementChild.textContent.includes(text);
-		var priceMinBool = true;
-		if (!(priceMin = ""))
-			listOfPosts[i].dataset.price >= priceMin;
+		var textBool = listOfPosts[i].querySelector("a").textContent.includes(text);
 
-		var priceMaxBool = true;
-		if (!(priceMax = ""))
-			listOfPosts[i].dataset.price <= priceMax;
-
-		var cityBool = true;
-		if (!(city == ""))
-			cityBool = (listOfPosts[i].dataset.city.toLowerCase() == city.toLowerCase());
+		var priceMinBool = (isNaN(priceMin) ? true : parseInt(listOfPosts[i].dataset.price) >= priceMin);
+		var priceMaxBool = (isNaN(priceMax) ? true : parseInt(listOfPosts[i].dataset.price) <= priceMax);
 		
-		var conditionBool = true
-		if (conditionList.length > 0)
-			conditionBool = conditionList.some(e => e.value == listOfPosts[i].dataset.condition);
+		var cityBool = (city == "" ? true : listOfPosts[i].dataset.city.toLowerCase() == city.toLowerCase());
+		
+		var conditionBool = (conditionList.length == 0 ? true : conditionList.some(e => e.value == listOfPosts[i].dataset.condition));
 		
 		listOfPosts[i].remove();
+		console.log(textBool, priceMinBool, priceMaxBool, cityBool, conditionBool)
 		if (textBool && priceMinBool && priceMaxBool && cityBool && conditionBool)
 			posts.appendChild(listOfPosts[i]);
 	}
 }
 
-var toggleButtons = ["sell-something-button", "modal-close", "modal-cancel"]
+const toggleButtons = ["sell-something-button", "modal-close", "modal-cancel"]
 toggleButtons.forEach(e => document.getElementById(e).addEventListener("click", toggleSellModal));
 
 document.getElementById("modal-accept").addEventListener("click", createPost);
