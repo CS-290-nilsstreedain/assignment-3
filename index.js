@@ -5,6 +5,8 @@
  * Name: Nils Streedain
  * Email: streedan@oregonstate.edu
  */
+var listOfPosts = document.querySelectorAll(".post");
+
 function toggleSellModal() {
 	const elementsToToggle = ["sell-something-modal", "modal-backdrop"];
 	elementsToToggle.forEach(e => document.getElementById(e).classList.toggle("hidden"));
@@ -58,10 +60,10 @@ function createPost() {
 	}));
 	
 	posts.appendChild(post);
+	listOfPosts = document.querySelectorAll(".post");
 	toggleSellModal();
 }
 
-const listOfPosts = document.querySelectorAll(".post");
 function filterPosts() {
 	const text = document.getElementById("filter-text").value;
 	const priceMin = parseInt(document.getElementById("filter-min-price").value);
@@ -71,12 +73,9 @@ function filterPosts() {
 	
 	for (var i = 0; i < listOfPosts.length; i++) {
 		var textBool = listOfPosts[i].querySelector("a").textContent.includes(text);
-
 		var priceMinBool = (isNaN(priceMin) ? true : parseInt(listOfPosts[i].dataset.price) >= priceMin);
 		var priceMaxBool = (isNaN(priceMax) ? true : parseInt(listOfPosts[i].dataset.price) <= priceMax);
-		
 		var cityBool = (city == "" ? true : listOfPosts[i].dataset.city.toLowerCase() == city.toLowerCase());
-		
 		var conditionBool = (conditionList.length == 0 ? true : conditionList.some(e => e.value == listOfPosts[i].dataset.condition));
 		
 		listOfPosts[i].remove();
