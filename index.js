@@ -6,7 +6,9 @@
  * Email: streedan@oregonstate.edu
  */
 var listOfPosts = document.querySelectorAll(".post");
+var listOfCities = document.getElementById("filter-city").children;
 
+// Toggle modal visibility and clear sell form
 function toggleSellModal() {
 	const elementsToToggle = ["sell-something-modal", "modal-backdrop"];
 	elementsToToggle.forEach(e => document.getElementById(e).classList.toggle("hidden"));
@@ -15,6 +17,7 @@ function toggleSellModal() {
 	document.getElementById("post-condition-new").checked = true;
 }
 
+// Create post with attributes from sell form. Add city to list if not added yet (warn if form not filled)
 function createPost() {
 	const description = document.getElementById("post-text-input").value;
 	const photo = document.getElementById("post-photo-input").value;
@@ -58,12 +61,16 @@ function createPost() {
 	postInfoContainer.appendChild(Object.assign(document.createElement("span"), {className: "post-city",
 		textContent: `(${city})`
 	}));
+
+	if (!Array.from(listOfCities).some(e => e.textContent == city))					// Add city to filter menu
+		document.getElementById("filter-city").appendChild(Object.assign(document.createElement("option"), {textContent: city}));
 	
 	posts.appendChild(post);
 	listOfPosts = document.querySelectorAll(".post");
 	toggleSellModal();
 }
 
+// Filter posts based on filter attributes, items filtered out are removed from the DOM
 function filterPosts() {
 	const text = document.getElementById("filter-text").value;
 	const priceMin = parseInt(document.getElementById("filter-min-price").value);
@@ -87,6 +94,5 @@ function filterPosts() {
 
 const toggleButtons = ["sell-something-button", "modal-close", "modal-cancel"]
 toggleButtons.forEach(e => document.getElementById(e).addEventListener("click", toggleSellModal));
-
 document.getElementById("modal-accept").addEventListener("click", createPost);
 document.getElementById("filter-update-button").addEventListener("click", filterPosts);
